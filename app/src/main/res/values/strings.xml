@@ -2,7 +2,8 @@
 <resources>
 
     <string name="app_name">AlternativeSpacesAndroid</string>
-    <string name="hello_world">Hello Valerji!</string>
+    <string name="take_photo">Take photo</string>
+    <string name="upload_photo">Upload photo</string>
     <string name="action_settings">Settings</string>
 
 </resources>
