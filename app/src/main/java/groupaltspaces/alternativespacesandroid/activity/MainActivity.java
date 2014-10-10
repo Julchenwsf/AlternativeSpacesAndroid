@@ -1,6 +1,9 @@
 package groupaltspaces.alternativespacesandroid.activity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,11 +17,16 @@ public class MainActivity extends Activity {
 
     private Button takePhoto;
     private Button uploadPhoto;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context = this;
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            System.out.println("you have a camera");
+        }
         bindViews();
         addListeners();
     }
@@ -32,7 +40,8 @@ public class MainActivity extends Activity {
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = CameraActivity.createLaunchIntent(context);
+                startActivity(intent);
             }
         });
 
