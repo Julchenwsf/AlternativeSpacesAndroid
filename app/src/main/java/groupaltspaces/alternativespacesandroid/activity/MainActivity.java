@@ -40,8 +40,8 @@ public class MainActivity extends Activity {
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = CameraActivity.createLaunchIntent(context);
-                startActivity(intent);
+            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, 0);
             }
         });
 

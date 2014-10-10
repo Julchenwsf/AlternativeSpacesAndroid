@@ -78,8 +78,7 @@ public class CameraActivity extends Activity {
         if(cameraId>=0) {
             camera = Camera.open(cameraId);
             System.out.println(camera);
-        }
-        else{
+        } else {
             Toast.makeText(this, "No front facing camera found.", Toast.LENGTH_LONG).show();
         }
 
