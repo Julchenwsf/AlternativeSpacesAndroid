@@ -30,8 +30,6 @@ public class UploadActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bitmap bm = (Bitmap) getIntent().getExtras().get("image");
-        Uri uri = (Uri) getIntent().getExtras().get("URI");
-        imageFile = new File(uri.getPath());
         setContentView(R.layout.upload_form);
         bindViews();
         addButtonListener();

@@ -1,18 +1,24 @@
 package groupaltspaces.alternativespacesandroid.activity;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Config;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.File;
 import java.io.IOException;
 
 import groupaltspaces.alternativespacesandroid.R;
@@ -45,8 +51,8 @@ public class MainActivity extends Activity {
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent, 0);
+                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, 0);
             }
         });
 
@@ -61,16 +67,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bm =(Bitmap) data.getExtras().get("data");
-
-//        try {
-//            ExifInterface exif = new ExifInterface(data.getData().getPath());
-//            int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-//            bm = rotateBitmap((Bitmap) data.getExtras().get("data"), rotation);
-//        } catch (IOException e) {
-//           bm = (Bitmap) data.getExtras().get("data");
-//            e.printStackTrace();
-//        }
+//        String uri =  data.getData().getPath();
+        Bitmap bm = (Bitmap) data.getExtras().get("data");
         Intent intent = new Intent(context, UploadActivity.class);
         intent.putExtra("image", bm);
         startActivity(intent);
