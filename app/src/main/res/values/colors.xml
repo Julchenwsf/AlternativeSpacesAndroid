@@ -2,7 +2,8 @@
 <resources>
     <color name="theme">#517fa4</color>
     <color name="buttonColor">#ff2c63a4</color>
-    <color name="textColor">#ffffffff</color>
+    <color name="textColor">#ffffff</color>
+    <color name="divider">#ffffff</color>
 
 
 </resources>

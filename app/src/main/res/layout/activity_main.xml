@@ -11,20 +11,23 @@
         android:layout_marginRight="30dp"
         android:layout_gravity="center">
 
+
         <Button
+            android:id="@+id/takePhoto"
             android:text="@string/take_photo"
             android:textColor="@color/textColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/button"/>
+            style="@drawable/button"/>
 
         <Button
+            android:id="@+id/uploadPhoto"
             android:text="@string/upload_photo"
             android:textColor="@color/textColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button"/>
+            style= "@drawable/button"/>
     </LinearLayout>
 
 </LinearLayout>

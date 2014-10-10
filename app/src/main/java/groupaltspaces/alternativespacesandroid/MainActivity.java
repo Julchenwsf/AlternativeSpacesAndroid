@@ -4,16 +4,43 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 
 public class MainActivity extends Activity {
+
+    private Button takePhoto;
+    private Button uploadPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        bindViews();
+        addListeners();
     }
 
+    private void bindViews(){
+        takePhoto = (Button) findViewById(R.id.takePhoto);
+        uploadPhoto = (Button) findViewById(R.id.uploadPhoto);
+    }
+
+    private void addListeners(){
+        takePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        uploadPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
