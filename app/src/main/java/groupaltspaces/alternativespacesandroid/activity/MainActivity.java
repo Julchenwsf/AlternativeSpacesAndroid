@@ -1,4 +1,4 @@
-package groupaltspaces.alternativespacesandroid;
+package groupaltspaces.alternativespacesandroid.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import groupaltspaces.alternativespacesandroid.R;
 
 
 public class MainActivity extends Activity {

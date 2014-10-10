@@ -9,7 +9,8 @@
             <corners
                 android:radius="3dp"/>
             <solid
-                android:color="@color/buttonColor"/>
+                android:color="@color/buttonPressedColor"
+                />
         </shape>
     </item>
 

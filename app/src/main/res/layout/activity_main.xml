@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            style="@drawable/button"/>
+            style="@style/Button"/>
 
         <Button
             android:id="@+id/uploadPhoto"
@@ -27,7 +27,7 @@
             android:textColor="@color/textColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style= "@drawable/button"/>
+            style= "@style/Button"/>
     </LinearLayout>
 
 </LinearLayout>
