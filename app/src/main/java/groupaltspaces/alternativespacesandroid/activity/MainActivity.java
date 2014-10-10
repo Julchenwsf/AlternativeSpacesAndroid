@@ -46,6 +46,8 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
             Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, ".");
+            intent.putExtra("return-data", true);
             startActivityForResult(intent, 0);
             }
         });
