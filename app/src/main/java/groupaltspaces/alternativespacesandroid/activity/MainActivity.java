@@ -46,8 +46,6 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
             Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, ".");
-            intent.putExtra("return-data", true);
             startActivityForResult(intent, 0);
             }
         });
@@ -63,16 +61,16 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bm;
+        Bitmap bm =(Bitmap) data.getExtras().get("data");
 
-        try {
-            ExifInterface exif = new ExifInterface(data.getData().getPath());
-            int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-            bm = rotateBitmap((Bitmap) data.getExtras().get("data"), rotation);
-        } catch (IOException e) {
-           bm = (Bitmap) data.getExtras().get("data");
-            e.printStackTrace();
-        }
+//        try {
+//            ExifInterface exif = new ExifInterface(data.getData().getPath());
+//            int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+//            bm = rotateBitmap((Bitmap) data.getExtras().get("data"), rotation);
+//        } catch (IOException e) {
+//           bm = (Bitmap) data.getExtras().get("data");
+//            e.printStackTrace();
+//        }
         Intent intent = new Intent(context, UploadActivity.class);
         intent.putExtra("image", bm);
         startActivity(intent);
