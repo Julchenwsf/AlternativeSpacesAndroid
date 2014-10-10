@@ -4,21 +4,19 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import java.io.File;
+import java.io.IOException;
 
 import groupaltspaces.alternativespacesandroid.R;
 import groupaltspaces.alternativespacesandroid.tasks.UploadTask;
 
-/**
- * Created by BrageEkroll on 10.10.2014.
- */
 public class UploadActivity extends Activity {
-
     private ImageView image;
     private Button button;
     private EditText title;
@@ -29,7 +27,15 @@ public class UploadActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bitmap bm = (Bitmap) getIntent().getExtras().get("image");
+        Bitmap bm = null;
+        Uri uri = (Uri) getIntent().getExtras().get("imageURI");
+        imageFile = new File(uri.getPath());
+        try {
+            bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         setContentView(R.layout.upload_form);
         bindViews();
         addButtonListener();
