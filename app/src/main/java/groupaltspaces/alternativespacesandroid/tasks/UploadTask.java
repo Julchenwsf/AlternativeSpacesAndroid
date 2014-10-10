@@ -1,11 +1,13 @@
 package groupaltspaces.alternativespacesandroid.tasks;
 
+import android.app.Application;
 import android.os.AsyncTask;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import groupaltspaces.alternativespacesandroid.R;
 import groupaltspaces.alternativespacesandroid.util.MultipartUtility;
 
 /**
@@ -27,7 +29,7 @@ public class UploadTask extends AsyncTask<Void, Void, List<String>> {
         this.title = title;
         this.interests = interests;
         this.description = description;
-        this.image = image;
+        this.image = new File("src/main/res/drawable-mdpi/logo.png");
     }
 
     @Override
