@@ -2,6 +2,7 @@ package groupaltspaces.alternativespacesandroid.activity;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -54,6 +55,14 @@ public class UploadActivity extends Activity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
+                    String lat = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
+                    String lng =   exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+                    System.out.println("Found location: " + lat + " " + lng);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 UploadTask uploadTask = new UploadTask(title.getText().toString(), interests.getText().toString(), description.getText().toString(), imageFile);
                 uploadTask.execute();
             }
