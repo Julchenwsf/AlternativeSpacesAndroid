@@ -1,9 +1,11 @@
 package groupaltspaces.alternativespacesandroid.util;
 
+import java.io.Serializable;
+
 /**
  * Created by BrageEkroll on 14.10.2014.
  */
-public class Interest {
+public class Interest implements Serializable{
 
     private int id;
     private String name;
@@ -20,4 +22,7 @@ public class Interest {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString() { return name; }
 }
