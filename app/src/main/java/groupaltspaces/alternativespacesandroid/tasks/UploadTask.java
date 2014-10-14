@@ -41,10 +41,10 @@ public class UploadTask extends AsyncTask<Void, Void, List<String>> {
             multipart.addFormField("interests", this.interests);
             multipart.addFilePart("image", image);
             response = multipart.finish();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return response;
+    } catch (IOException ex) {
+        ex.printStackTrace();
+    }
+    return response;
     }
 
     @Override
