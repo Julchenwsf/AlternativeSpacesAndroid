@@ -12,8 +12,6 @@ import java.util.Map;
 import groupaltspaces.alternativespacesandroid.util.MultipartUtility;
 
 public class InterestTask extends AsyncTask<String, Void, List<String>> {
-
-
     private static final String requestURL = "http://folk.ntnu.no/valerijf/div/AlternativeSpaces/source/backend/db/DBInterests.php?q=";
     private InterestCallback callback;
 
@@ -23,7 +21,6 @@ public class InterestTask extends AsyncTask<String, Void, List<String>> {
 
     @Override
     protected List<String> doInBackground(String... strings) {
-        System.out.println("REQUEST: " + strings[0]);
         List<String> response = null;
         try {
             MultipartUtility multipart = new MultipartUtility(requestURL + strings[0], "UTF-8");
@@ -37,9 +34,7 @@ public class InterestTask extends AsyncTask<String, Void, List<String>> {
     @Override
     protected void onPostExecute(List<String> response) {
         super.onPostExecute(response);
-        System.out.println(response.get(0));
         List<Map<String,Object>> messages = new Gson().fromJson(response.get(0),new TypeToken<List<Map<String,Object>>>(){}.getType());
         callback.onInterestReceived(messages);
-
     }
 }

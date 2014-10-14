@@ -3,7 +3,6 @@ package groupaltspaces.alternativespacesandroid.activity;
 import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Bitmap;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -99,11 +98,10 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
         title = (EditText) findViewById(R.id.title);
         interests = (InterestCompleteTextView) findViewById(R.id.tags);
         description = (EditText) findViewById(R.id.description);
-
     }
 
     private void setUpAdapter(){
-        ArrayAdapter<Interest> arrayAdapter = new ArrayAdapter<Interest>(this, android.R.layout.simple_list_item_1,interestList);
+        ArrayAdapter<Interest> arrayAdapter = new ArrayAdapter<Interest>(this, android.R.layout.simple_list_item_1, interestList);
         interests.setAdapter(arrayAdapter);
         interests.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Delete);
     }
@@ -112,15 +110,11 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
-                    String lat = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
-                    String lng = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
-                    System.out.println("Found location: " + lat + " " + lng);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                UploadTask uploadTask = new UploadTask(title.getText().toString(), interests.getText().toString(), description.getText().toString(), imageFile, context);
+                String interestsString = "";
+                for (Object interest : interests.getObjects()) interestsString += " " + ((Interest) interest).getId();
+                if(interestsString.length() > 1) interestsString = interestsString.substring(1);
+
+                UploadTask uploadTask = new UploadTask(title.getText().toString(), interestsString, description.getText().toString(), imageFile, context);
                 uploadTask.execute();
             }
         });
@@ -156,9 +150,9 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
     @Override
     public void onInterestReceived(List<Map<String, Object>> maps) {
         List<Interest> duplicateFiltered = new ArrayList<Interest>();
-        for(int i=maps.size()-1; i>=0; i--) {
-            Interest temp = new Interest((String)maps.get(i).get("interest_id"), (String)maps.get(i).get("interest_name"));
-            if(! interests.getObjects().contains(temp)) duplicateFiltered.add(temp);
+        for (Map<String, Object> map : maps) {
+            Interest temp = new Interest((String) map.get("interest_id"), (String) map.get("interest_name"));
+            if (!interests.getObjects().contains(temp)) duplicateFiltered.add(temp);
         }
 
         interestList = duplicateFiltered.toArray(new Interest[duplicateFiltered.size()]);
