@@ -23,4 +23,15 @@
     <style name="Button">
         <item name="android:background">@drawable/button</item>
     </style>
+
+    <style name="CustomDialog" parent="@android:style/Theme.Holo.Dialog">
+        <item name="android:windowTitleStyle">@style/dialog_title_style</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="dialog_title_style" parent="android:Widget.TextView">
+        <item name="android:background">@drawable/dialog</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textSize">20dp</item>
+    </style>
 </resources>

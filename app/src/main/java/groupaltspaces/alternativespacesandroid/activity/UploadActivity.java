@@ -1,6 +1,8 @@
 package groupaltspaces.alternativespacesandroid.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -10,24 +12,32 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import groupaltspaces.alternativespacesandroid.R;
+import groupaltspaces.alternativespacesandroid.dialogs.CustomDialog;
+import groupaltspaces.alternativespacesandroid.tasks.Callback;
 import groupaltspaces.alternativespacesandroid.tasks.UploadTask;
 
-public class UploadActivity extends Activity {
+public class UploadActivity extends Activity implements Callback {
     private ImageView image;
     private Button button;
     private EditText title;
     private EditText interests;
     private EditText description;
     private File imageFile;
+    private Dialog dialog;
+    private Callback context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         Bitmap bm = null;
         Uri uri = (Uri) getIntent().getExtras().get("imageURI");
         imageFile = new File(uri.getPath());
@@ -49,6 +59,7 @@ public class UploadActivity extends Activity {
         title = (EditText) findViewById(R.id.title);
         interests = (EditText) findViewById(R.id.tags);
         description = (EditText) findViewById(R.id.description);
+
     }
 
     private void addButtonListener(){
@@ -63,9 +74,31 @@ public class UploadActivity extends Activity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                UploadTask uploadTask = new UploadTask(title.getText().toString(), interests.getText().toString(), description.getText().toString(), imageFile);
+                UploadTask uploadTask = new UploadTask(title.getText().toString(), interests.getText().toString(), description.getText().toString(), imageFile, context);
                 uploadTask.execute();
             }
         });
+    }
+
+    @Override
+    public void onSuccess() {
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog);
+        dialog.setTitle("Status");
+        description.setText("Image uploaded");
+        dialog.show();
+    }
+
+    @Override
+    public void onFail(List<String> messages) {
+        dialog = new CustomDialog(this);
+        LinearLayout descriptionLayout = (LinearLayout) dialog.findViewById(R.id.description_layout);
+        dialog.setTitle("Status");
+        for(String message : messages){
+            TextView description = new TextView(this);
+            description.setText(" - " + message);
+            descriptionLayout.addView(description);
+        }
+        dialog.show();
     }
 }

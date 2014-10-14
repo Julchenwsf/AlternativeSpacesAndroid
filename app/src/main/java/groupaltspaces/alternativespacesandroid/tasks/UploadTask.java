@@ -2,8 +2,13 @@ package groupaltspaces.alternativespacesandroid.tasks;
 
 import android.os.AsyncTask;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import groupaltspaces.alternativespacesandroid.util.MultipartUtility;
@@ -14,12 +19,15 @@ public class UploadTask extends AsyncTask<Void, Void, List<String>> {
     private String interests;
     private String description;
     private File image;
+    private Callback callback;
 
-    public UploadTask(String title, String interests, String description, File image){
+
+    public UploadTask(String title, String interests, String description, File image, Callback callback){
         this.title = title;
         this.interests = interests;
         this.description = description;
         this.image = image;
+        this.callback = callback;
     }
 
     @Override
@@ -34,10 +42,7 @@ public class UploadTask extends AsyncTask<Void, Void, List<String>> {
             multipart.addFilePart("image", image);
             response = multipart.finish();
 
-            System.out.println("SERVER REPLIED:");
-            for (String line : response) {
-                System.out.println(line);
-            }
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -45,7 +50,26 @@ public class UploadTask extends AsyncTask<Void, Void, List<String>> {
     }
 
     @Override
-    protected void onPostExecute(List<String> aVoid) {
-        super.onPostExecute(aVoid);
+    protected void onPostExecute(List<String> response) {
+        super.onPostExecute(response);
+        System.out.println(response.get(0));
+        JSONObject json = null;
+        try {
+            json = new JSONObject(response.get(0));
+            boolean status = json.getBoolean("success");
+            JSONArray jsonArray = json.getJSONArray("response");
+            List<String> messages = new ArrayList<String>();
+            for (int i = 0;i<jsonArray.length();i++){
+                messages.add(jsonArray.getString(i));
+            }
+            if (status){
+                callback.onSuccess();
+            }else{
+                callback.onFail(messages);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 }
