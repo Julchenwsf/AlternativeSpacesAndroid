@@ -41,8 +41,6 @@ public class UploadTask extends AsyncTask<Void, Void, List<String>> {
             multipart.addFormField("interests", this.interests);
             multipart.addFilePart("image", image);
             response = multipart.finish();
-
-
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -53,23 +51,19 @@ public class UploadTask extends AsyncTask<Void, Void, List<String>> {
     protected void onPostExecute(List<String> response) {
         super.onPostExecute(response);
         System.out.println(response.get(0));
-        JSONObject json = null;
+
         try {
-            json = new JSONObject(response.get(0));
+            JSONObject json = new JSONObject(response.get(0));
             boolean status = json.getBoolean("success");
+
             JSONArray jsonArray = json.getJSONArray("response");
             List<String> messages = new ArrayList<String>();
-            for (int i = 0;i<jsonArray.length();i++){
-                messages.add(jsonArray.getString(i));
-            }
-            if (status){
-                callback.onSuccess();
-            }else{
-                callback.onFail(messages);
-            }
+            for (int i = 0;i<jsonArray.length();i++) messages.add(jsonArray.getString(i));
+
+            if (status) callback.onSuccess();
+            else callback.onFail(messages);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 }
