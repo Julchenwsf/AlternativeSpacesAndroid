@@ -2,7 +2,6 @@ package groupaltspaces.alternativespacesandroid.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -12,7 +11,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,6 +22,7 @@ import com.tokenautocomplete.TokenCompleteTextView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -84,13 +83,10 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
 
             @Override
             public void afterTextChanged(Editable editable) {
-                System.out.println(editable);
-                if(editable.toString().length()<2){
-                    return;
-                }
+                String searchString = editable.toString().replaceAll(",","").replaceAll(" ", "");
+                if(searchString.length() < 2) return;
+
                 InterestTask interestTask = new InterestTask(interestCallback);
-                String searchString = editable.toString().replaceAll(",","");
-                searchString.replaceAll(" ", "");
                 System.out.println(searchString);
                 interestTask.execute(searchString);
             }
@@ -119,7 +115,7 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
                 try {
                     ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
                     String lat = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
-                    String lng =   exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+                    String lng = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
                     System.out.println("Found location: " + lat + " " + lng);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -159,16 +155,13 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
 
     @Override
     public void onInterestReceived(List<Map<String, Object>> maps) {
-        interestList = new Interest[maps.size()];
-        for(int i= 0; i<maps.size();i++){
-            interestList[i] = new Interest((String)maps.get(i).get("interest_id"),(String)maps.get(i).get("interest_name"));
+        List<Interest> duplicateFiltered = new ArrayList<Interest>();
+        for(int i=maps.size()-1; i>=0; i--) {
+            Interest temp = new Interest((String)maps.get(i).get("interest_id"), (String)maps.get(i).get("interest_name"));
+            if(! interests.getObjects().contains(temp)) duplicateFiltered.add(temp);
         }
-        for(Interest interest : interestList){
-            System.out.println(interest.getName());
-        }
+
+        interestList = duplicateFiltered.toArray(new Interest[duplicateFiltered.size()]);
         setUpAdapter();
-
     }
-
-
 }

@@ -13,13 +13,7 @@ import com.tokenautocomplete.TokenCompleteTextView;
 
 import groupaltspaces.alternativespacesandroid.R;
 
-/**
- * Created by BrageEkroll on 14.10.2014.
- */
-public class InterestCompleteTextView extends TokenCompleteTextView
-
-{
-
+public class InterestCompleteTextView extends TokenCompleteTextView {
 
     public InterestCompleteTextView(Context context, AttributeSet attrs) {
         super(context, attrs);

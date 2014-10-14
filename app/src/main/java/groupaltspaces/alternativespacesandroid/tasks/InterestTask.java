@@ -2,24 +2,15 @@ package groupaltspaces.alternativespacesandroid.tasks;
 
 import android.os.AsyncTask;
 
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONException;
-
-
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import groupaltspaces.alternativespacesandroid.util.MultipartUtility;
 
-/**
- * Created by BrageEkroll on 14.10.2014.
- */
 public class InterestTask extends AsyncTask<String, Void, List<String>> {
 
 
@@ -32,6 +23,7 @@ public class InterestTask extends AsyncTask<String, Void, List<String>> {
 
     @Override
     protected List<String> doInBackground(String... strings) {
+        System.out.println("REQUEST: " + strings[0]);
         List<String> response = null;
         try {
             MultipartUtility multipart = new MultipartUtility(requestURL + strings[0], "UTF-8");
@@ -50,7 +42,4 @@ public class InterestTask extends AsyncTask<String, Void, List<String>> {
         callback.onInterestReceived(messages);
 
     }
-
-
-
 }
