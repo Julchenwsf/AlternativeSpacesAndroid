@@ -2,20 +2,19 @@ package groupaltspaces.alternativespacesandroid.tasks;
 
 import android.os.AsyncTask;
 
-import org.json.JSONArray;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONException;
-import org.json.JSONObject;
+
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 
-import groupaltspaces.alternativespacesandroid.util.JsonHelper;
 import groupaltspaces.alternativespacesandroid.util.MultipartUtility;
 
 /**
@@ -46,14 +45,10 @@ public class InterestTask extends AsyncTask<String, Void, List<String>> {
     @Override
     protected void onPostExecute(List<String> response) {
         super.onPostExecute(response);
-        try {
-            JSONObject json = new JSONObject(response.get(0));
-            JSONArray jsonArray = json.getJSONArray("response");
-            List<Map<String,Object>> messages = JsonHelper.toList(jsonArray);
-            callback.onInterestReceived(messages);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        System.out.println(response.get(0));
+        List<Map<String,Object>> messages = new Gson().fromJson(response.get(0),new TypeToken<List<Map<String,Object>>>(){}.getType());
+        callback.onInterestReceived(messages);
+
     }
 
 

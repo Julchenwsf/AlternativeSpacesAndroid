@@ -79,13 +79,20 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                InterestTask interestTask = new InterestTask(interestCallback);
-                interestTask.execute(charSequence.toString());
+
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                System.out.println(editable);
+                if(editable.toString().length()<2){
+                    return;
+                }
+                InterestTask interestTask = new InterestTask(interestCallback);
+                String searchString = editable.toString().replaceAll(",","");
+                searchString.replaceAll(" ", "");
+                System.out.println(searchString);
+                interestTask.execute(searchString);
             }
         });
     }
@@ -152,9 +159,16 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
 
     @Override
     public void onInterestReceived(List<Map<String, Object>> maps) {
-            interestList = new Interest[maps.size()];
-            for(int i= 0; i<maps.size();i++){
-                interestList[i] = new Interest((String)maps.get(i).get("interest_id"),(String)maps.get(i).get("interest_name"));
-            }
+        interestList = new Interest[maps.size()];
+        for(int i= 0; i<maps.size();i++){
+            interestList[i] = new Interest((String)maps.get(i).get("interest_id"),(String)maps.get(i).get("interest_name"));
+        }
+        for(Interest interest : interestList){
+            System.out.println(interest.getName());
+        }
+        setUpAdapter();
+
     }
+
+
 }
