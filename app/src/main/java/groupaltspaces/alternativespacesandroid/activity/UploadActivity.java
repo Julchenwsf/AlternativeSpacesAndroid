@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +32,6 @@ public class UploadActivity extends Activity implements Callback {
     private EditText interests;
     private EditText description;
     private File imageFile;
-    private Dialog dialog;
     private Callback context;
 
     @Override
@@ -69,7 +69,7 @@ public class UploadActivity extends Activity implements Callback {
                 try {
                     ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
                     String lat = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
-                    String lng =   exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+                    String lng = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
                     System.out.println("Found location: " + lat + " " + lng);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -82,16 +82,13 @@ public class UploadActivity extends Activity implements Callback {
 
     @Override
     public void onSuccess() {
-        dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog);
-        dialog.setTitle("Status");
-        description.setText("Image uploaded");
-        dialog.show();
+        Toast.makeText(getApplicationContext(), "Image uploaded", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override
     public void onFail(List<String> messages) {
-        dialog = new CustomDialog(this);
+        Dialog dialog = new CustomDialog(this);
         LinearLayout descriptionLayout = (LinearLayout) dialog.findViewById(R.id.description_layout);
         dialog.setTitle("Status");
         for(String message : messages){
