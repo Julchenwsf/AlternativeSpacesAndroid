@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,15 +26,19 @@ import groupaltspaces.alternativespacesandroid.R;
 import groupaltspaces.alternativespacesandroid.dialogs.CustomDialog;
 import groupaltspaces.alternativespacesandroid.tasks.Callback;
 import groupaltspaces.alternativespacesandroid.tasks.UploadTask;
+import groupaltspaces.alternativespacesandroid.util.Interest;
+import groupaltspaces.alternativespacesandroid.util.InterestCompleteTextView;
 
 public class UploadActivity extends Activity implements Callback {
     private ImageView image;
     private Button button;
     private EditText title;
-    private EditText interests;
+    private InterestCompleteTextView interests;
     private EditText description;
     private File imageFile;
+    private Dialog dialog;
     private Callback context;
+    private static final Interest[] interestList = new Interest[]{new Interest(1000, "football"), new Interest(3000, "Basketball")};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +56,7 @@ public class UploadActivity extends Activity implements Callback {
         setContentView(R.layout.upload_form);
         bindViews();
         addButtonListener();
+        setUpAdapter();
         image.setImageBitmap(bm);
     }
 
@@ -57,9 +64,14 @@ public class UploadActivity extends Activity implements Callback {
         image = (ImageView) findViewById(R.id.image);
         button = (Button) findViewById(R.id.upload);
         title = (EditText) findViewById(R.id.title);
-        interests = (EditText) findViewById(R.id.tags);
+        interests = (InterestCompleteTextView) findViewById(R.id.tags);
         description = (EditText) findViewById(R.id.description);
 
+    }
+
+    private void setUpAdapter(){
+        ArrayAdapter<Interest> arrayAdapter = new ArrayAdapter<Interest>(this, android.R.layout.simple_list_item_1,interestList);
+        interests.setAdapter(arrayAdapter);
     }
 
     private void addButtonListener(){
@@ -69,7 +81,7 @@ public class UploadActivity extends Activity implements Callback {
                 try {
                     ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
                     String lat = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
-                    String lng = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+                    String lng =   exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
                     System.out.println("Found location: " + lat + " " + lng);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -88,14 +100,22 @@ public class UploadActivity extends Activity implements Callback {
 
     @Override
     public void onFail(List<String> messages) {
-        Dialog dialog = new CustomDialog(this);
+        dialog = new CustomDialog(this);
+        final TextView dialogTitle = (TextView) dialog.findViewById(R.id.dialog_title);
         LinearLayout descriptionLayout = (LinearLayout) dialog.findViewById(R.id.description_layout);
-        dialog.setTitle("Status");
+        Button button = (Button) dialog.findViewById(R.id.dismissButton);
+        dialogTitle.setText("Status");
         for(String message : messages){
             TextView description = new TextView(this);
             description.setText(" - " + message);
             descriptionLayout.addView(description);
         }
         dialog.show();
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
     }
 }
