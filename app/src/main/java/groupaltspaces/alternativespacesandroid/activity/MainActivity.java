@@ -2,9 +2,7 @@ package groupaltspaces.alternativespacesandroid.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -72,12 +70,13 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode != RESULT_OK) return;
+
         Intent intent = new Intent(context, UploadActivity.class);
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             intent.putExtra("imageURI", fileUri);
             intent.putExtra("deleteImage", true);
-        }
-        if (requestCode == ACTIVITY_CHOOSE_FILE && resultCode == RESULT_OK) {
+        } else if (requestCode == ACTIVITY_CHOOSE_FILE) {
             intent.putExtra("imageURI", Uri.parse("file://" + FileUtils.getPath(this, data.getData())));
             intent.putExtra("deleteImage", false);
         }
