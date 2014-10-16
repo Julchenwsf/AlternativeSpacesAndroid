@@ -56,7 +56,6 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
         Bitmap bm = null;
         Uri uri = (Uri) getIntent().getExtras().get("imageURI");
         imageFile = new File(uri.getPath());
-        System.out.println(uri.getPath());
 
         deleteImg = getIntent().getExtras().getBoolean("deleteImage");
 
@@ -92,7 +91,6 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
                 if(searchString.length() < 2) return;
 
                 InterestTask interestTask = new InterestTask(interestCallback);
-                System.out.println(searchString);
                 interestTask.execute(searchString);
             }
         });
