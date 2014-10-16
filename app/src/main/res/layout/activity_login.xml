@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,16 +15,18 @@
 
         <EditText
             android:id="@+id/username"
-            android:hint="User Name"
+            android:hint="@string/login_username"
+            android:background="@color/textColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginBottom="10dp"/>
 
         <EditText
             android:id="@+id/password"
-            android:hint="Password"
-            android:password="true"
+            android:hint="@string/login_password"
+            android:background="@color/textColor"
+            android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -30,9 +34,10 @@
 
         <Button
             android:id="@+id/login"
-            android:hint="Log in"
-            android:layout_width="wrap_content"
+            android:text="@string/login_login"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/textColor" />
+            android:textColor="@color/textColor"
+            style="@style/Button"/>
     </LinearLayout>
 </LinearLayout>
