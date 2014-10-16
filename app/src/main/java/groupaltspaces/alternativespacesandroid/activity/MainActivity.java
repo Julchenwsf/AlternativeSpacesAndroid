@@ -72,16 +72,16 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Intent intent = new Intent(context, UploadActivity.class);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Intent intent = new Intent(context, UploadActivity.class);
             intent.putExtra("imageURI", fileUri);
-            startActivity(intent);
+            intent.putExtra("deleteImage", true);
         }
         if (requestCode == ACTIVITY_CHOOSE_FILE && resultCode == RESULT_OK) {
-            Intent intent = new Intent(context, UploadActivity.class);
             intent.putExtra("imageURI", Uri.parse("file://" + FileUtils.getPath(this, data.getData())));
-            startActivity(intent);
+            intent.putExtra("deleteImage", false);
         }
+        startActivity(intent);
     }
 
     @Override

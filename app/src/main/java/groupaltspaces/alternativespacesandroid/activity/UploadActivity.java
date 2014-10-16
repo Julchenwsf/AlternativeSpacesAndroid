@@ -46,6 +46,8 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
     private InterestCallback interestCallback;
     private static Interest[] interestList = new Interest[0];
 
+    private boolean deleteImg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +57,8 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
         Uri uri = (Uri) getIntent().getExtras().get("imageURI");
         imageFile = new File(uri.getPath());
         System.out.println(uri.getPath());
+
+        deleteImg = getIntent().getExtras().getBoolean("deleteImage");
 
         try {
             bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
@@ -165,6 +169,8 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
     @Override
     public void onDestroy() {
         super.onDestroy();
-        imageFile.delete();
+        if(deleteImg) {
+            imageFile.delete();
+        }
     }
 }
