@@ -72,6 +72,18 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstance) {
+        savedInstance.putString("fileURI", fileUri.getPath());
+        super.onSaveInstanceState(savedInstance);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstance) {
+        fileUri = Uri.parse(savedInstance.getString("fileURI"));
+        super.onRestoreInstanceState(savedInstance);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
