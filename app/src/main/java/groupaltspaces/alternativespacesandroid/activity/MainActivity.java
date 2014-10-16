@@ -22,6 +22,8 @@ public class MainActivity extends Activity {
     public static final int MEDIA_TYPE_VIDEO = 2;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 
+    public static final int ACTIVITY_CHOOSE_FILE = 11;
+
     private Button takePhoto;
     private Button uploadPhoto;
     private Context context;
@@ -56,7 +58,12 @@ public class MainActivity extends Activity {
         uploadPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent chooseFile;
+                Intent intent;
+                chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+                chooseFile.setType("file/*");
+                intent = Intent.createChooser(chooseFile, "Choose a file to upload");
+                startActivityForResult(intent, ACTIVITY_CHOOSE_FILE);
             }
         });
     }
@@ -69,11 +76,15 @@ public class MainActivity extends Activity {
             intent.putExtra("imageURI", fileUri);
             startActivity(intent);
         }
+        if (requestCode == ACTIVITY_CHOOSE_FILE && resultCode == RESULT_OK) {
+            System.out.println("MANAGED TO CHOOSE FILE");
+        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstance) {
-        savedInstance.putString("fileURI", fileUri.getPath());
+        savedInstance.putString("fileURI", fileUri == null ? "" : fileUri.getPath());
+
         super.onSaveInstanceState(savedInstance);
     }
 
