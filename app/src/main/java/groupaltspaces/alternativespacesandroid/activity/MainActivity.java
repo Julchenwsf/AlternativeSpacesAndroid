@@ -2,7 +2,9 @@ package groupaltspaces.alternativespacesandroid.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -15,6 +17,7 @@ import android.net.Uri;
 import java.io.File;
 
 import groupaltspaces.alternativespacesandroid.R;
+import groupaltspaces.alternativespacesandroid.util.FileUtils;
 
 
 public class MainActivity extends Activity {
@@ -58,11 +61,9 @@ public class MainActivity extends Activity {
         uploadPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent chooseFile;
-                Intent intent;
-                chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-                chooseFile.setType("file/*");
-                intent = Intent.createChooser(chooseFile, "Choose a file to upload");
+                Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+                chooseFile.setType("image/*");
+                Intent intent = Intent.createChooser(chooseFile, "Choose an image to upload");
                 startActivityForResult(intent, ACTIVITY_CHOOSE_FILE);
             }
         });
@@ -77,7 +78,9 @@ public class MainActivity extends Activity {
             startActivity(intent);
         }
         if (requestCode == ACTIVITY_CHOOSE_FILE && resultCode == RESULT_OK) {
-            System.out.println("MANAGED TO CHOOSE FILE");
+            Intent intent = new Intent(context, UploadActivity.class);
+            intent.putExtra("imageURI", Uri.parse("file://" + FileUtils.getPath(this, data.getData())));
+            startActivity(intent);
         }
     }
 

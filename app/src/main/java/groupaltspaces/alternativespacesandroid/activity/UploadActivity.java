@@ -54,6 +54,7 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
         Bitmap bm = null;
         Uri uri = (Uri) getIntent().getExtras().get("imageURI");
         imageFile = new File(uri.getPath());
+        System.out.println(uri.getPath());
 
         try {
             bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
