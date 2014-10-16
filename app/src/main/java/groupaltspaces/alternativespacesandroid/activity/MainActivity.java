@@ -79,7 +79,7 @@ public class MainActivity extends Activity {
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstance) {
-        fileUri = Uri.parse(savedInstance.getString("fileURI"));
+        fileUri = Uri.parse("file://" + savedInstance.getString("fileURI"));
         super.onRestoreInstanceState(savedInstance);
     }
 

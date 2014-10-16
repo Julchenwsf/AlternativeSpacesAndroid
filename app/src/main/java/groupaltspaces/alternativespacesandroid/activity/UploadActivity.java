@@ -54,6 +54,7 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
         Bitmap bm = null;
         Uri uri = (Uri) getIntent().getExtras().get("imageURI");
         imageFile = new File(uri.getPath());
+
         try {
             bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
         } catch (IOException e) {
@@ -122,6 +123,7 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
 
     @Override
     public void onSuccess() {
+
         Toast.makeText(getApplicationContext(), "Image uploaded", Toast.LENGTH_SHORT).show();
         finish();
     }
