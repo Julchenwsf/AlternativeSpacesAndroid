@@ -123,7 +123,6 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
 
     @Override
     public void onSuccess() {
-
         Toast.makeText(getApplicationContext(), "Image uploaded", Toast.LENGTH_SHORT).show();
         finish();
     }
@@ -159,5 +158,12 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
 
         interestList = duplicateFiltered.toArray(new Interest[duplicateFiltered.size()]);
         setUpAdapter();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        imageFile.delete();
     }
 }
