@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,6 +50,7 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
     private UploadActivity activity;
     private InterestCallback interestCallback;
     private LinearLayout uploadLayout;
+    private ArrayList<Interest> addedInterests = new ArrayList<Interest>();
     private static Interest[] interestList = new Interest[0];
 
     private boolean deleteImg;
@@ -101,8 +103,8 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                 String[] searchStrings = charSequence.toString().split(",");
 
-                String searchString = searchStrings[0];
-                searchString = charSequence.toString().replaceAll(",","").replaceAll(" ", "");
+                String searchString = searchStrings[searchStrings.length-1].replaceAll(",","").replaceAll(" ","");
+//                searchString = charSequence.toString().replaceAll(",","").replaceAll(" ", "");
                 if(searchString.length() < 2) return;
 
                 InterestTask interestTask = new InterestTask(interestCallback);
@@ -131,6 +133,16 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
         ArrayAdapter<Interest> arrayAdapter = new ArrayAdapter<Interest>(this, android.R.layout.simple_list_item_1, interestList);
         interests.setAdapter(arrayAdapter);
         interests.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+        interests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Interest interest = (Interest) adapterView.getAdapter().getItem(i);
+                addedInterests.add(interest);
+                for(Interest interest1 : addedInterests){
+                    System.out.println(interest1.getId());
+                }
+            }
+        });
     }
 
 //    private void addButtonListener(){
