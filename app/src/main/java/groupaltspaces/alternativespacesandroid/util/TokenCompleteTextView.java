@@ -123,7 +123,7 @@ public abstract class TokenCompleteTextView extends MultiAutoCompleteTextView im
             public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
                 //Detect single commas, remove them and complete the current token instead
                 if (source.length() == 1 && source.charAt(0) == ',') {
-                    performCompletion();
+                    //performCompletion();
                     return "";
                 }
 
@@ -307,6 +307,7 @@ public abstract class TokenCompleteTextView extends MultiAutoCompleteTextView im
                 bestGuess = defaultObject(currentCompletionText());
             }
             replaceText(convertSelectionToString(bestGuess));
+            objects.add(bestGuess);
         } else {
             super.performCompletion();
         }
@@ -924,9 +925,10 @@ public abstract class TokenCompleteTextView extends MultiAutoCompleteTextView im
 
         @Override
         public void onSpanAdded(Spannable text, Object what, int start, int end) {
+            System.out.println("onAdd start");
             if (what instanceof TokenImageSpan && !savingState) {
                 TokenImageSpan token = (TokenImageSpan)what;
-                objects.add(token.getToken());
+
                 updateCountSpan(1);
 
                 if (listener != null)
@@ -936,10 +938,12 @@ public abstract class TokenCompleteTextView extends MultiAutoCompleteTextView im
 
         @Override
         public void onSpanRemoved(Spannable text, Object what, int start, int end) {
+            System.out.println("onRem start");
             if (what instanceof TokenImageSpan && !savingState) {
                 TokenImageSpan token = (TokenImageSpan)what;
                 if (objects.contains(token.getToken())) {
                     objects.remove(token.getToken());
+                    System.out.println("onRem done");
                     updateCountSpan(-1);
                 }
 
