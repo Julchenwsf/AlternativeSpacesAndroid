@@ -3,6 +3,10 @@ package groupaltspaces.alternativespacesandroid.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -13,6 +17,7 @@ import android.widget.Button;
 import android.net.Uri;
 
 import java.io.File;
+import java.io.IOException;
 
 import groupaltspaces.alternativespacesandroid.R;
 import groupaltspaces.alternativespacesandroid.util.FileUtils;
@@ -29,12 +34,19 @@ public class MainActivity extends Activity {
     private Button uploadPhoto;
     private Context context;
     private Uri fileUri;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+    private Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
+        locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+        location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+        System.out.println(location.getLatitude());
+        System.out.println(location.getLongitude());
         bindViews();
         addListeners();
     }
@@ -65,6 +77,7 @@ public class MainActivity extends Activity {
                 startActivityForResult(intent, ACTIVITY_CHOOSE_FILE);
             }
         });
+
     }
 
     @Override
@@ -74,6 +87,7 @@ public class MainActivity extends Activity {
 
         Intent intent = new Intent(context, UploadActivity.class);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            setImageLocation(fileUri,location);
             intent.putExtra("imageURI", fileUri);
             intent.putExtra("deleteImage", true);
         } else if (requestCode == ACTIVITY_CHOOSE_FILE) {
@@ -81,6 +95,55 @@ public class MainActivity extends Activity {
             intent.putExtra("deleteImage", false);
         }
         startActivity(intent);
+    }
+
+    private void setImageLocation(Uri fileUri, Location location){
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(fileUri.getPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //String latitudeStr = "90/1,12/1,30/1";
+        double lat = location.getLatitude();
+        double alat = Math.abs(lat);
+        String dms = Location.convert(alat, Location.FORMAT_SECONDS);
+        String[] splits = dms.split(":");
+        String[] secnds = (splits[2]).split("\\.");
+        String seconds;
+        if(secnds.length==0) {
+            seconds = splits[2];
+        }else
+        {
+            seconds = secnds[0];
+        }
+
+        String latitudeStr = splits[0] + "/1," + splits[1] + "/1," + seconds + "/1";
+        exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, latitudeStr);
+        exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, lat>0?"N":"S");
+
+        double lon = location.getLongitude();
+        double alon = Math.abs(lon);
+        dms = Location.convert(alon, Location.FORMAT_SECONDS);
+        splits = dms.split(":");
+        secnds = (splits[2]).split("\\.");
+
+        if(secnds.length==0){
+            seconds = splits[2];
+        }else
+        {
+            seconds = secnds[0];
+        }
+        String longitudeStr = splits[0] + "/1," + splits[1] + "/1," + seconds + "/1";
+        exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, longitudeStr);
+        exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, lon>0?"E":"W");
+        try {
+            exif.saveAttributes();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 
