@@ -79,7 +79,6 @@ public abstract class TokenCompleteTextView extends MultiAutoCompleteTextView im
     private Tokenizer tokenizer;
     private Object selectedObject;
     private TokenListener listener;
-    private TokenSpanWatcher spanWatcher;
     private ArrayList<Object> objects;
     private TokenDeleteStyle deletionStyle = TokenDeleteStyle._Parent;
     private TokenClickStyle tokenClickStyle = TokenClickStyle.None;
@@ -95,10 +94,6 @@ public abstract class TokenCompleteTextView extends MultiAutoCompleteTextView im
     private void resetListeners() {
         //reset listeners that get discarded when you set text
         Editable text = getText();
-        if (text != null) {
-            text.setSpan(spanWatcher, 0, text.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-            addTextChangedListener(new TokenTextWatcher());
-        }
     }
 
     private void init() {
@@ -106,7 +101,6 @@ public abstract class TokenCompleteTextView extends MultiAutoCompleteTextView im
         objects = new ArrayList<Object>();
         Editable text = getText();
         assert null != text;
-        spanWatcher = new TokenSpanWatcher();
 
         resetListeners();
 
@@ -311,6 +305,12 @@ public abstract class TokenCompleteTextView extends MultiAutoCompleteTextView im
         } else {
             super.performCompletion();
         }
+    }
+
+    public void addToken(Object obj) {
+        if(objects.contains(obj)) return;
+        replaceText(convertSelectionToString(obj));
+        objects.add(obj);
     }
 
     @Override
@@ -533,12 +533,6 @@ public abstract class TokenCompleteTextView extends MultiAutoCompleteTextView im
                 } else {
                     setSelection(text.length());
                 }
-
-                TokenSpanWatcher[] watchers = getText().getSpans(0, getText().length(), TokenSpanWatcher.class);
-                if (watchers.length == 0) {
-                    //Someone removes watchers? I'm pretty sure this isn't in this code... -mgod
-                    text.setSpan(spanWatcher, 0, text.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                }
             }
         }
     }
@@ -640,11 +634,6 @@ public abstract class TokenCompleteTextView extends MultiAutoCompleteTextView im
                     }
                     editable.setSpan(tokenSpan, offset, offset + ssb.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                    //In some cases, particularly the 1 to nth objects when not focused and restoring
-                    //onSpanAdded doesn't get called
-                    if (!objects.contains(object)) {
-                        spanWatcher.onSpanAdded(editable, tokenSpan, offset, offset + ssb.length() - 1);
-                    }
 
                     setSelection(editable.length());
                 }
@@ -658,44 +647,16 @@ public abstract class TokenCompleteTextView extends MultiAutoCompleteTextView im
      * @param object the object to add to the displayed token
      */
     public void addObject(Object object) {
+        if(objects.contains(object)) return;
         addObject(object, "");
+        objects.add(object);
     }
 
-    /**
-     * Remove an object from the token list. Will remove duplicates or do nothing if no object
-     * present in the view.
-     *
-     * @param object object to remove, may be null or not in the view
-     */
-    @SuppressWarnings("unused")
-    public void removeObject(final Object object) {
-        post(new Runnable() {
-            @Override
-            public void run() {
-                //To make sure all the appropriate callbacks happen, we just want to piggyback on the
-                //existing code that handles deleting spans when the text changes
-                Editable text = getText();
-                if (text == null) return;
-
-                TokenImageSpan[] spans = text.getSpans(0, text.length(), TokenImageSpan.class);
-                for (TokenImageSpan span: spans) {
-                    if (span.getToken().equals(object)) {
-                        removeSpan(span);
-                    }
-                }
-            }
-        });
-    }
 
     private void removeSpan(TokenImageSpan span) {
         Editable text = getText();
         if (text == null) return;
-
-        //If the spanwatcher has been removed, we need to also manually trigger onSpanRemoved
-        TokenSpanWatcher[] spans = text.getSpans(0, text.length(), TokenSpanWatcher.class);
-        if (spans.length == 0) {
-            spanWatcher.onSpanRemoved(text, span, text.getSpanStart(span), text.getSpanEnd(span));
-        }
+        objects.remove(span.getToken());
 
         //Add 1 to the end because we put a " " at the end of the spans when adding them
         text.delete(text.getSpanStart(span), text.getSpanEnd(span) + 1);
@@ -897,117 +858,6 @@ public abstract class TokenCompleteTextView extends MultiAutoCompleteTextView im
         public void onTokenRemoved(Object token);
     }
 
-    private class TokenSpanWatcher implements SpanWatcher {
-        private void updateCountSpan(final int change) {
-            final Editable text = getText();
-            if (text == null || lastLayout == null) return;
-
-            CountSpan[] counts = text.getSpans(0, text.length(), CountSpan.class);
-            if (counts.length == 1) {
-                final CountSpan span = counts[0];
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        int spanStart = text.getSpanStart(span);
-                        int spanEnd = text.getSpanEnd(span);
-                        span.setCount(span.getCount() + change);
-                        if (span.getCount() > 0) {
-                            text.replace(spanStart, spanEnd, span.text);
-                        } else {
-                            text.delete(spanStart, spanEnd);
-                            text.removeSpan(span);
-                        }
-                    }
-                });
-
-            }
-        }
-
-        @Override
-        public void onSpanAdded(Spannable text, Object what, int start, int end) {
-            System.out.println("onAdd start");
-            if (what instanceof TokenImageSpan && !savingState) {
-                TokenImageSpan token = (TokenImageSpan)what;
-
-                updateCountSpan(1);
-
-                if (listener != null)
-                    listener.onTokenAdded(token.getToken());
-            }
-        }
-
-        @Override
-        public void onSpanRemoved(Spannable text, Object what, int start, int end) {
-            System.out.println("onRem start");
-            if (what instanceof TokenImageSpan && !savingState) {
-                TokenImageSpan token = (TokenImageSpan)what;
-                if (objects.contains(token.getToken())) {
-                    objects.remove(token.getToken());
-                    System.out.println("onRem done");
-                    updateCountSpan(-1);
-                }
-
-                if (listener != null)
-                    listener.onTokenRemoved(token.getToken());
-            }
-        }
-
-        @Override
-        public void onSpanChanged(Spannable text, Object what, int ostart, int oend, int nstart, int nend) {}
-    }
-
-    /**
-     * deletes tokens if you delete the space in front of them
-     * without this, you get the auto-complete dropdown a character early
-     */
-    private class TokenTextWatcher implements TextWatcher {
-
-        protected void removeToken(TokenImageSpan token, Editable text) {
-            text.removeSpan(token);
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-        @Override
-        public void afterTextChanged(Editable s) {}
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            System.out.println("changing text: " + s);
-            Editable text = getText();
-            if (text == null)
-                return;
-
-            clearSelections();
-            updateHint();
-
-            TokenImageSpan[] spans = text.getSpans(start - before, start - before + count, TokenImageSpan.class);
-
-            for (TokenImageSpan token: spans) {
-
-                int position = start + count;
-                if (text.getSpanStart(token) < position && position <= text.getSpanEnd(token)) {
-                    //We may have to manually reverse the auto-complete and remove the extra ,'s
-                    int spanStart = text.getSpanStart(token);
-                    int spanEnd = text.getSpanEnd(token);
-
-                    removeToken(token, text);
-
-                    //The end of the span is the character index after it
-                    spanEnd--;
-
-                    if (spanEnd >= 0 && text.charAt(spanEnd) == ',') {
-                        text.delete(spanEnd, spanEnd + 1);
-                    }
-
-                    if (spanStart > 0 && text.charAt(spanStart) == ',') {
-                        text.delete(spanStart, spanStart + 1);
-                    }
-                }
-            }
-        }
-    }
 
     protected ArrayList<Serializable> getSerializableObjects() {
         ArrayList<Serializable> serializables = new ArrayList<Serializable>();
