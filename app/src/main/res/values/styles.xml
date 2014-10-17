@@ -47,6 +47,12 @@
         <item name="android:gravity">top|left</item>
     </style>
 
+    <style name="custom_ImageViewStyle">
+        <item name="android:background">@drawable/edittext</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+    </style>
+
     <style name="CustomDialog" parent="@android:style/Theme.Holo.Dialog">
         <item name="android:windowTitleStyle">@style/dialog_title_style</item>
         <item name="android:backgroundDimEnabled">true</item>
