@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import groupaltspaces.alternativespacesandroid.R;
 import groupaltspaces.alternativespacesandroid.tasks.LoginTask;
 
@@ -48,11 +51,8 @@ public class LoginActivity extends Activity {
     }
 
     public void onLoginSuccess(){
-        SharedPreferences sharedPreferences = getSharedPreferences(getResources().getString(R.string.user_credentials),0);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("username", username.getText().toString());
-        editor.putString("password", password.getText().toString());
-        editor.commit();
+        saveUserCredentials();
+
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
 
@@ -60,5 +60,33 @@ public class LoginActivity extends Activity {
 
     public void onLoginFail(){
             Toast.makeText(getApplicationContext(), "Unable to log in", Toast.LENGTH_SHORT).show();
+    }
+
+    private void saveUserCredentials(){
+        String username = this.username.getText().toString();
+        String password = this.password.getText().toString();
+        for(int i =0; i<2; i++){
+            try {
+                password = sha1(password);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+        }
+        SharedPreferences sharedPreferences = getSharedPreferences(getResources().getString(R.string.user_credentials),0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("username", username);
+        editor.putString("password", password);
+        editor.commit();
+    }
+
+    private String sha1(String input) throws NoSuchAlgorithmException {
+        MessageDigest mDigest = MessageDigest.getInstance("SHA1");
+        byte[] result = mDigest.digest(input.getBytes());
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < result.length; i++) {
+            sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+        }
+
+        return sb.toString();
     }
 }
