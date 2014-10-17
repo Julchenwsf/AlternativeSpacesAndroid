@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.ExifInterface;
 import android.os.Bundle;
@@ -34,8 +33,6 @@ public class MainActivity extends Activity {
     private Button uploadPhoto;
     private Context context;
     private Uri fileUri;
-    private LocationManager locationManager;
-    private LocationListener locationListener;
     private Location location;
 
     @Override
@@ -43,8 +40,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
-        locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
-        location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         System.out.println(location.getLatitude());
         System.out.println(location.getLongitude());
         bindViews();
@@ -98,52 +95,31 @@ public class MainActivity extends Activity {
     }
 
     private void setImageLocation(Uri fileUri, Location location){
-        ExifInterface exif = null;
         try {
-            exif = new ExifInterface(fileUri.getPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //String latitudeStr = "90/1,12/1,30/1";
-        double lat = location.getLatitude();
-        double alat = Math.abs(lat);
-        String dms = Location.convert(alat, Location.FORMAT_SECONDS);
-        String[] splits = dms.split(":");
-        String[] secnds = (splits[2]).split("\\.");
-        String seconds;
-        if(secnds.length==0) {
-            seconds = splits[2];
-        }else
-        {
-            seconds = secnds[0];
-        }
+            ExifInterface exif = new ExifInterface(fileUri.getPath());
+            double lat = location.getLatitude();
+            exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, convertDoubleCoordinateToString(lat));
+            exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, lat>0?"N":"S");
 
-        String latitudeStr = splits[0] + "/1," + splits[1] + "/1," + seconds + "/1";
-        exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, latitudeStr);
-        exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, lat>0?"N":"S");
-
-        double lon = location.getLongitude();
-        double alon = Math.abs(lon);
-        dms = Location.convert(alon, Location.FORMAT_SECONDS);
-        splits = dms.split(":");
-        secnds = (splits[2]).split("\\.");
-
-        if(secnds.length==0){
-            seconds = splits[2];
-        }else
-        {
-            seconds = secnds[0];
-        }
-        String longitudeStr = splits[0] + "/1," + splits[1] + "/1," + seconds + "/1";
-        exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, longitudeStr);
-        exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, lon>0?"E":"W");
-        try {
+            double lon = location.getLongitude();
+            exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, convertDoubleCoordinateToString(lon));
+            exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, lon>0?"E":"W");
             exif.saveAttributes();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    private String convertDoubleCoordinateToString(double coordinate) {
+        double alat = Math.abs(coordinate);
+        String dms = Location.convert(alat, Location.FORMAT_SECONDS);
+        String[] splits = dms.split(":");
+        String[] secnds = (splits[2]).split("\\.");
+        String seconds;
+        if(secnds.length==0) seconds = splits[2];
+        else seconds = secnds[0];
 
+        return splits[0] + "/1," + splits[1] + "/1," + seconds + "/1";
     }
 
 
@@ -190,15 +166,6 @@ public class MainActivity extends Activity {
         // using Environment.getExternalStorageState() before doing this.
 
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "AltSpaces");
-
-        // Create the storage directory if it does not exist
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
-                System.out.println("MyCameraApp: failed to create directory");
-                return null;
-            }
-        }
-
 
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE){

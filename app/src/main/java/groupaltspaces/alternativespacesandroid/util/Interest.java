@@ -23,9 +23,6 @@ public class Interest implements Serializable{
 
     @Override
     public boolean equals(Object other) {
-        if(other instanceof Interest)
-            return this.id.equals(((Interest) other).getId());
-        else
-            return false;
+        return other instanceof Interest && this.id.equals(((Interest) other).getId());
     }
 }

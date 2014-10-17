@@ -18,7 +18,7 @@ public class LoginTask extends AsyncTask<Void, Void, List<String>> {
     private static final String requestURL = "http://folk.ntnu.no/valerijf/div/AlternativeSpaces/source/backend/forms/logform.php";
     private String username;
     private String password;
-    private LoginActivity callback;
+    private Callback callback;
     private ProgressDialog progressDialog;
 
 
@@ -64,10 +64,10 @@ public class LoginTask extends AsyncTask<Void, Void, List<String>> {
 
             JSONArray jsonArray = json.getJSONArray("response");
             List<String> messages = new ArrayList<String>();
-            for (int i = 0;i<jsonArray.length();i++) messages.add(jsonArray.getString(i));
+            for (int i = 0;i<jsonArray.length(); i++) messages.add(jsonArray.getString(i));
 
-            if (status) callback.onLoginSuccess();
-            else callback.onLoginFail();
+            if (status) callback.onSuccess();
+            else callback.onFail(messages);
         } catch (JSONException e) {
             e.printStackTrace();
         }

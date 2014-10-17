@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import groupaltspaces.alternativespacesandroid.R;
-import groupaltspaces.alternativespacesandroid.activity.StartupActivity;
 import groupaltspaces.alternativespacesandroid.activity.UploadActivity;
 import groupaltspaces.alternativespacesandroid.util.MultipartUtility;
+
 
 public class UploadTask extends AsyncTask<Void, Void, List<String>> {
     private static final String requestURL = "http://folk.ntnu.no/valerijf/div/AlternativeSpaces/source/backend/forms/uploadphoto.php";
