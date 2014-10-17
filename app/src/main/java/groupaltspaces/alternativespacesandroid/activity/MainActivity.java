@@ -83,6 +83,7 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
+
     @Override
     public void onSaveInstanceState(Bundle savedInstance) {
         savedInstance.putString("fileURI", fileUri == null ? "" : fileUri.getPath());
@@ -109,7 +110,12 @@ public class MainActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
+        if(id == R.id.logout){
+            getSharedPreferences(getResources().getString(R.string.user_credentials),0).edit().clear().commit();
+            startActivity(new Intent(context, LoginActivity.class));
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private static Uri getOutputMediaFileUri(int type){

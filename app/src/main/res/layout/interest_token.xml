@@ -6,8 +6,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/theme"
-        android:padding="5dp"
+        android:padding="2dp"
         android:textColor="@color/textColor"
-        android:textSize="18sp" />
+        android:textSize="15dp" />
 
 </LinearLayout>
