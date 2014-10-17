@@ -26,9 +26,4 @@ public class InterestCompleteTextView extends TokenCompleteTextView {
         ((TextView)view.findViewById(R.id.name)).setText(interest.getName());
         return view;
     }
-
-    @Override
-    protected Object defaultObject(String hourList) {
-        return null;
-    }
 }

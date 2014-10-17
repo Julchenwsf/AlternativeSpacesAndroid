@@ -34,7 +34,6 @@ public class UploadTask extends AsyncTask<Void, Void, List<String>> {
         this.image = image;
         this.callback = callback;
         this.progressDialog = new ProgressDialog(callback);
-        System.out.println(callback.getSharedPreferences(callback.getResources().getString(R.string.user_credentials),0).getString(callback.getResources().getString(R.string.credentials_password), null));
     }
 
     @Override
