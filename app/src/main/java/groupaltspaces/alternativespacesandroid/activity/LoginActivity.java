@@ -52,9 +52,9 @@ public class LoginActivity extends Activity {
 
     public void onLoginSuccess(){
         saveUserCredentials();
-
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
+        finish();
 
     }
 
