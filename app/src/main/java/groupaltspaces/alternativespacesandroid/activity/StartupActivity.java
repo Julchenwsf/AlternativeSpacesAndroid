@@ -7,6 +7,9 @@ import android.os.Bundle;
 
 import groupaltspaces.alternativespacesandroid.R;
 
+/**
+ * Created by BrageEkroll on 17.10.2014.
+ */
 public class StartupActivity extends Activity {
 
     @Override
