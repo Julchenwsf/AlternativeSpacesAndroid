@@ -14,11 +14,7 @@ import java.util.List;
 import groupaltspaces.alternativespacesandroid.activity.LoginActivity;
 import groupaltspaces.alternativespacesandroid.util.MultipartUtility;
 
-/**
- * Created by BrageEkroll on 17.10.2014.
- */
 public class LoginTask extends AsyncTask<Void, Void, List<String>> {
-
     private static final String requestURL = "http://folk.ntnu.no/valerijf/div/AlternativeSpaces/source/backend/forms/logform.php";
     private String username;
     private String password;
@@ -48,6 +44,7 @@ public class LoginTask extends AsyncTask<Void, Void, List<String>> {
             MultipartUtility multipart = new MultipartUtility(requestURL, "UTF-8");
             multipart.addFormField("username", this.username);
             multipart.addFormField("password", this.password);
+            multipart.addFormField("source", "Android");
             response = multipart.finish();
         } catch (IOException ex) {
             ex.printStackTrace();
