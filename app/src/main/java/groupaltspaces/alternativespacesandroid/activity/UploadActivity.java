@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,6 +47,7 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
     private Dialog dialog;
     private UploadActivity activity;
     private InterestCallback interestCallback;
+    private LinearLayout uploadLayout;
     private static Interest[] interestList = new Interest[0];
 
     private boolean deleteImg;
@@ -70,8 +73,20 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
         bindViews();
         addButtonListener();
         addInterestListener();
+        addLayoutListener();
         setUpAdapter();
         image.setImageBitmap(bm);
+    }
+
+    private void addLayoutListener(){
+        uploadLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                return false;
+            }
+        });
     }
 
     private void addInterestListener(){
@@ -103,6 +118,7 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
         title = (EditText) findViewById(R.id.title);
         interests = (InterestCompleteTextView) findViewById(R.id.tags);
         description = (EditText) findViewById(R.id.description);
+        uploadLayout = (LinearLayout) findViewById(R.id.upload_layout);
 
         interests.allowDuplicates(false);
     }
