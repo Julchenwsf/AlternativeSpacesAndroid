@@ -2,6 +2,7 @@ package groupaltspaces.alternativespacesandroid.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import groupaltspaces.alternativespacesandroid.util.TokenCompleteTextView;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +37,6 @@ import groupaltspaces.alternativespacesandroid.tasks.InterestTask;
 import groupaltspaces.alternativespacesandroid.tasks.UploadTask;
 import groupaltspaces.alternativespacesandroid.util.Interest;
 import groupaltspaces.alternativespacesandroid.util.InterestCompleteTextView;
-import groupaltspaces.alternativespacesandroid.util.TokenCompleteTextView;
 
 public class UploadActivity extends Activity implements Callback, InterestCallback {
     private ImageView image;
@@ -96,7 +99,7 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                String searchString = charSequence.toString().replaceAll(",","").replaceAll(" ", "");
+                String searchString = charSequence.toString().replaceAll(",", "").replaceAll(" ", "");
 
                 InterestTask interestTask = new InterestTask(interestCallback);
                 interestTask.execute(searchString);
@@ -124,6 +127,12 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
         ArrayAdapter<Interest> arrayAdapter = new ArrayAdapter<Interest>(this, android.R.layout.simple_list_item_1, interestList);
         interests.setAdapter(arrayAdapter);
         interests.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Delete);
+        interests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                interests.addObject(adapterView.getItemAtPosition(i));
+            }
+        });
     }
 
     private void addButtonListener(){
@@ -131,6 +140,7 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
             @Override
             public void onClick(View view) {
                 String interestsString = "";
+                System.out.println(interests.getObjects().size());
                 for (Object interest : interests.getObjects()) interestsString += " " + ((Interest) interest).getId();
                 if(interestsString.length() > 1) interestsString = interestsString.substring(1);
 
