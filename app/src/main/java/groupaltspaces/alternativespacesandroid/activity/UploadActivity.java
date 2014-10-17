@@ -118,14 +118,11 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
         interests = (InterestCompleteTextView) findViewById(R.id.tags);
         description = (EditText) findViewById(R.id.description);
         uploadLayout = (LinearLayout) findViewById(R.id.upload_layout);
-
-        interests.allowDuplicates(false);
     }
 
     private void setUpAdapter(){
         ArrayAdapter<Interest> arrayAdapter = new ArrayAdapter<Interest>(this, android.R.layout.simple_list_item_1, interestList);
         interests.setAdapter(arrayAdapter);
-        interests.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Delete);
         interests.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -139,7 +136,6 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
             @Override
             public void onClick(View view) {
                 String interestsString = "";
-                System.out.println(interests.getObjects().size());
                 for (Object interest : interests.getObjects()) interestsString += " " + ((Interest) interest).getId();
                 if(interestsString.length() > 1) interestsString = interestsString.substring(1);
 
