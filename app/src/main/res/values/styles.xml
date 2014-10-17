@@ -1,8 +1,9 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/ActionBar</item>
+        <item name="android:editTextStyle">@style/custom_EditTextStyle</item>
     </style>
 
     <style name="NoActionBar" parent="android:Theme.Holo.Light.NoActionBar">
@@ -22,6 +23,19 @@
 
     <style name="Button">
         <item name="android:background">@drawable/button</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="custom_EditTextStyle" parent="@android:style/Widget.EditText">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:background">@color/editTextBackground</item>
     </style>
 
     <style name="CustomDialog" parent="@android:style/Theme.Holo.Dialog">

@@ -13,20 +13,14 @@
         android:layout_marginLeft="30dp">
 
         <EditText
+            style="@style/custom_EditTextStyle"
             android:id="@+id/title"
-            android:hint="@string/upload_photo_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:hint="@string/upload_photo_title" />
 
         <groupaltspaces.alternativespacesandroid.util.InterestCompleteTextView
+            style="@style/custom_EditTextStyle"
             android:id="@+id/tags"
-            android:hint="@string/upload_photo_interests"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:hint="@string/upload_photo_interests" />
 
         <EditText
             android:id="@+id/description"
@@ -49,13 +43,8 @@
             android:layout_marginBottom="10dp"/>
 
         <Button
+            style="@style/Button"
             android:id="@+id/upload"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="@string/upload_photo_upload"
-            android:textColor="@color/textColor"
-            style="@style/Button"/>
+            android:text="@string/upload_photo_upload"/>
     </LinearLayout>
 </LinearLayout>

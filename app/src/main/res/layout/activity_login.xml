@@ -14,30 +14,19 @@
         android:layout_gravity="center">
 
         <EditText
+            style="@style/custom_EditTextStyle"
             android:id="@+id/username"
-            android:hint="@string/login_username"
-            android:background="@color/textColor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:hint="@string/login_username" />
 
         <EditText
+            style="@style/custom_EditTextStyle"
             android:id="@+id/password"
             android:hint="@string/login_password"
-            android:background="@color/textColor"
-            android:inputType="textPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:inputType="textPassword" />
 
         <Button
+            style="@style/Button"
             android:id="@+id/login"
-            android:text="@string/login_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/textColor"
-            style="@style/Button"/>
+            android:text="@string/login_login" />
     </LinearLayout>
 </LinearLayout>

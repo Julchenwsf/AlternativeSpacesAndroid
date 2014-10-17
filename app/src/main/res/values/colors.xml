@@ -6,5 +6,5 @@
     <color name="textColor">#ffffff</color>
     <color name="divider">#ffffff</color>
 
-
+    <color name="editTextBackground">#ffffff</color>
 </resources>
