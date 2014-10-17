@@ -2,7 +2,6 @@ package groupaltspaces.alternativespacesandroid.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,8 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.tokenautocomplete.TokenCompleteTextView;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,6 +33,7 @@ import groupaltspaces.alternativespacesandroid.tasks.InterestTask;
 import groupaltspaces.alternativespacesandroid.tasks.UploadTask;
 import groupaltspaces.alternativespacesandroid.util.Interest;
 import groupaltspaces.alternativespacesandroid.util.InterestCompleteTextView;
+import groupaltspaces.alternativespacesandroid.util.TokenCompleteTextView;
 
 public class UploadActivity extends Activity implements Callback, InterestCallback {
     private ImageView image;
@@ -99,7 +97,6 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                 String searchString = charSequence.toString().replaceAll(",","").replaceAll(" ", "");
-                if(searchString.length() < 2) return;
 
                 InterestTask interestTask = new InterestTask(interestCallback);
                 interestTask.execute(searchString);

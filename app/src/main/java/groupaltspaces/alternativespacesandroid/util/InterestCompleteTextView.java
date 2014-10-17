@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.tokenautocomplete.TokenCompleteTextView;
-
 import groupaltspaces.alternativespacesandroid.R;
 
 public class InterestCompleteTextView extends TokenCompleteTextView {
