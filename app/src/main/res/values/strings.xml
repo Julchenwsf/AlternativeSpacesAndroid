@@ -14,4 +14,8 @@
     <string name="upload_photo_interests">Interests</string>
     <string name="upload_photo_description">Description</string>
     <string name="upload_photo_upload">Upload</string>
+
+    <string name="user_credentials">USER_CREDENTIALS</string>
+    <string name="credentials_username">username</string>
+    <string name="credentials_password">password</string>
 </resources>

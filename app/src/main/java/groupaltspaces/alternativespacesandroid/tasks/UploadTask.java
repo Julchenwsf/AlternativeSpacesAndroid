@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import groupaltspaces.alternativespacesandroid.R;
+import groupaltspaces.alternativespacesandroid.activity.StartupActivity;
 import groupaltspaces.alternativespacesandroid.activity.UploadActivity;
 import groupaltspaces.alternativespacesandroid.util.MultipartUtility;
 
@@ -32,6 +34,7 @@ public class UploadTask extends AsyncTask<Void, Void, List<String>> {
         this.image = image;
         this.callback = callback;
         this.progressDialog = new ProgressDialog(callback);
+        System.out.println(callback.getSharedPreferences(callback.getResources().getString(R.string.user_credentials),0).getString(callback.getResources().getString(R.string.credentials_password), null));
     }
 
     @Override
@@ -50,6 +53,8 @@ public class UploadTask extends AsyncTask<Void, Void, List<String>> {
             multipart.addFormField("description", this.description);
             multipart.addFormField("title", this.title);
             multipart.addFormField("interests", this.interests);
+            multipart.addFormField("username",callback.getSharedPreferences(callback.getResources().getString(R.string.user_credentials),0).getString(callback.getResources().getString(R.string.credentials_username), null));
+            multipart.addFormField("password",callback.getSharedPreferences(callback.getResources().getString(R.string.user_credentials),0).getString(callback.getResources().getString(R.string.credentials_password), null));
             multipart.addFilePart("image", image);
             response = multipart.finish();
         } catch (IOException ex) {
