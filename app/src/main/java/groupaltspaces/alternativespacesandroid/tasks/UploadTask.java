@@ -1,5 +1,6 @@
 package groupaltspaces.alternativespacesandroid.tasks;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import groupaltspaces.alternativespacesandroid.activity.UploadActivity;
 import groupaltspaces.alternativespacesandroid.util.MultipartUtility;
 
 public class UploadTask extends AsyncTask<Void, Void, List<String>> {
@@ -19,15 +21,24 @@ public class UploadTask extends AsyncTask<Void, Void, List<String>> {
     private String interests;
     private String description;
     private File image;
-    private Callback callback;
+    private UploadActivity callback;
+    private ProgressDialog progressDialog;
 
 
-    public UploadTask(String title, String interests, String description, File image, Callback callback){
+    public UploadTask(String title, String interests, String description, File image, UploadActivity callback){
         this.title = title;
         this.interests = interests;
         this.description = description;
         this.image = image;
         this.callback = callback;
+        this.progressDialog = new ProgressDialog(callback);
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressDialog.setMessage("Uploading photo...");
+        progressDialog.show();
     }
 
     @Override
@@ -48,9 +59,15 @@ public class UploadTask extends AsyncTask<Void, Void, List<String>> {
     }
 
     @Override
+    protected void onProgressUpdate(Void... values) {
+        super.onProgressUpdate(values);
+    }
+
+    @Override
     protected void onPostExecute(List<String> response) {
         super.onPostExecute(response);
         System.out.println(response.get(0));
+        progressDialog.dismiss();
 
         try {
             JSONObject json = new JSONObject(response.get(0));

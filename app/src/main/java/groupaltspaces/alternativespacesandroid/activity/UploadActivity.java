@@ -2,6 +2,7 @@ package groupaltspaces.alternativespacesandroid.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -42,7 +43,7 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
     private EditText description;
     private File imageFile;
     private Dialog dialog;
-    private Callback context;
+    private UploadActivity activity;
     private InterestCallback interestCallback;
     private static Interest[] interestList = new Interest[0];
 
@@ -51,7 +52,7 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = this;
+        activity = this;
         interestCallback = this;
         Bitmap bm = null;
         Uri uri = (Uri) getIntent().getExtras().get("imageURI");
@@ -118,7 +119,7 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
                 for (Object interest : interests.getObjects()) interestsString += " " + ((Interest) interest).getId();
                 if(interestsString.length() > 1) interestsString = interestsString.substring(1);
 
-                UploadTask uploadTask = new UploadTask(title.getText().toString(), interestsString, description.getText().toString(), imageFile, context);
+                UploadTask uploadTask = new UploadTask(title.getText().toString(), interestsString, description.getText().toString(), imageFile, activity);
                 uploadTask.execute();
             }
         });
