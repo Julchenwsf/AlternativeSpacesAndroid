@@ -83,16 +83,16 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                String searchString = editable.toString().replaceAll(",","").replaceAll(" ", "");
+                String searchString = charSequence.toString().replaceAll(",","").replaceAll(" ", "");
                 if(searchString.length() < 2) return;
 
                 InterestTask interestTask = new InterestTask(interestCallback);
                 interestTask.execute(searchString);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
     }
@@ -103,6 +103,8 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
         title = (EditText) findViewById(R.id.title);
         interests = (InterestCompleteTextView) findViewById(R.id.tags);
         description = (EditText) findViewById(R.id.description);
+
+        interests.allowDuplicates(false);
     }
 
     private void setUpAdapter(){
@@ -157,7 +159,7 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
         List<Interest> duplicateFiltered = new ArrayList<Interest>();
         for (Map<String, Object> map : maps) {
             Interest temp = new Interest((String) map.get("interest_id"), (String) map.get("interest_name"));
-            if (!interests.getObjects().contains(temp)) duplicateFiltered.add(temp);
+            duplicateFiltered.add(temp);
         }
 
         interestList = duplicateFiltered.toArray(new Interest[duplicateFiltered.size()]);
