@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,7 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
     private ImageView image;
     private Button button;
     private EditText title;
-    private InterestCompleteTextView interests;
+    private MultiAutoCompleteTextView interests;
     private EditText description;
     private File imageFile;
     private Dialog dialog;
@@ -71,7 +72,7 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
 
         setContentView(R.layout.upload_form);
         bindViews();
-        addButtonListener();
+//        addButtonListener();
         addInterestListener();
         addLayoutListener();
         setUpAdapter();
@@ -98,7 +99,10 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                String searchString = charSequence.toString().replaceAll(",","").replaceAll(" ", "");
+                String[] searchStrings = charSequence.toString().split(",");
+
+                String searchString = searchStrings[0];
+                searchString = charSequence.toString().replaceAll(",","").replaceAll(" ", "");
                 if(searchString.length() < 2) return;
 
                 InterestTask interestTask = new InterestTask(interestCallback);
@@ -116,32 +120,32 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
         image = (ImageView) findViewById(R.id.image);
         button = (Button) findViewById(R.id.upload);
         title = (EditText) findViewById(R.id.title);
-        interests = (InterestCompleteTextView) findViewById(R.id.tags);
+        interests = (MultiAutoCompleteTextView) findViewById(R.id.tags);
         description = (EditText) findViewById(R.id.description);
         uploadLayout = (LinearLayout) findViewById(R.id.upload_layout);
 
-        interests.allowDuplicates(false);
+//        interests.allowDuplicates(false);
     }
 
     private void setUpAdapter(){
         ArrayAdapter<Interest> arrayAdapter = new ArrayAdapter<Interest>(this, android.R.layout.simple_list_item_1, interestList);
         interests.setAdapter(arrayAdapter);
-        interests.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Delete);
+        interests.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
     }
 
-    private void addButtonListener(){
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String interestsString = "";
-                for (Object interest : interests.getObjects()) interestsString += " " + ((Interest) interest).getId();
-                if(interestsString.length() > 1) interestsString = interestsString.substring(1);
-
-                UploadTask uploadTask = new UploadTask(title.getText().toString(), interestsString, description.getText().toString(), imageFile, activity);
-                uploadTask.execute();
-            }
-        });
-    }
+//    private void addButtonListener(){
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                String interestsString = "";
+//                for (Object interest : interests.getObjects()) interestsString += " " + ((Interest) interest).getId();
+//                if(interestsString.length() > 1) interestsString = interestsString.substring(1);
+//
+//                UploadTask uploadTask = new UploadTask(title.getText().toString(), interestsString, description.getText().toString(), imageFile, activity);
+//                uploadTask.execute();
+//            }
+//        });
+//    }
 
     @Override
     public void onSuccess() {

@@ -18,7 +18,7 @@
             android:id="@+id/title"
             android:hint="@string/upload_photo_title" />
 
-        <groupaltspaces.alternativespacesandroid.util.InterestCompleteTextView
+        <MultiAutoCompleteTextView
             style="@style/custom_EditTextStyle"
             android:id="@+id/tags"
             android:hint="@string/upload_photo_interests" />
