@@ -36,14 +36,12 @@ import java.util.List;
 public abstract class TokenCompleteTextView extends MultiAutoCompleteTextView {
     private Tokenizer tokenizer;
     private Object selectedObject;
-    private ArrayList<Object> objects;
     private Layout lastLayout = null;
     private boolean initialized = false;
 
 
     private void init() {
         setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-        objects = new ArrayList<Object>();
         Editable text = getText();
         assert null != text;
 
@@ -87,6 +85,11 @@ public abstract class TokenCompleteTextView extends MultiAutoCompleteTextView {
     }
 
     public List<Object> getObjects() {
+        List<Object> objects = new ArrayList<Object>();
+        TokenImageSpan[] spans = getText().getSpans(0, getText().length(), TokenImageSpan.class);
+        for(int i=0; i<spans.length; i++) {
+            objects.add(spans[i].getToken());
+        }
         return objects;
     }
 
@@ -226,7 +229,7 @@ public abstract class TokenCompleteTextView extends MultiAutoCompleteTextView {
         if (editable != null) {
             if (tokenSpan == null) {
                 editable.replace(start, end, "");
-            } else if (objects.contains(tokenSpan.getToken())) {
+            } else if (getObjects().contains(tokenSpan.getToken())) {
                 editable.replace(start, end, "");
             } else {
                 QwertyKeyListener.markAsReplaced(editable, start, end, original);
@@ -239,26 +242,13 @@ public abstract class TokenCompleteTextView extends MultiAutoCompleteTextView {
 
     public void addObject(final Object object) {
         if (object == null) return;
-        if (objects.contains(object)) return;
-
-        objects.add(object);
-
-        TokenImageSpan tokenSpan = buildSpanForObject(object);
-        Editable editable = getText();
-
-        if (editable != null) {
-            int offset = editable.length();
-            editable.setSpan(tokenSpan, offset, offset, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-
-            setSelection(editable.length());
-        }
+        if (getObjects().contains(object)) return;
     }
 
 
     private void removeSpan(TokenImageSpan span) {
         Editable text = getText();
         if (text == null) return;
-        objects.remove(span.getToken());
 
         text.delete(text.getSpanStart(span), text.getSpanEnd(span));
     }

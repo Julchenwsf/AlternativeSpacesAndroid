@@ -125,10 +125,6 @@ public class UploadActivity extends Activity implements Callback, InterestCallba
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 interests.addObject(adapterView.getItemAtPosition(i));
-
-                for(Object object : interests.getObjects()) {
-                    System.out.println(((Interest) object).getName());
-                }
             }
         });
     }

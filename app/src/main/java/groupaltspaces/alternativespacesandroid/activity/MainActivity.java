@@ -41,9 +41,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         context = this;
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        System.out.println(location.getLatitude());
-        System.out.println(location.getLongitude());
+        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if(location == null) location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         bindViews();
         addListeners();
     }
