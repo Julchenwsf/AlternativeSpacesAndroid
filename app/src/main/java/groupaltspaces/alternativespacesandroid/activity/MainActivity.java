@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.net.Uri;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,16 +34,14 @@ public class MainActivity extends Activity {
     private Button uploadPhoto;
     private Context context;
     private Uri fileUri;
-    private Location location;
+    private LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if(location == null) location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         bindViews();
         addListeners();
     }
@@ -83,7 +82,14 @@ public class MainActivity extends Activity {
 
         Intent intent = new Intent(context, UploadActivity.class);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            setImageLocation(fileUri,location);
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if(location == null) location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if(location == null) {
+                Toast.makeText(this, "Could not acquire location", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            setImageLocation(fileUri, location);
             intent.putExtra("imageURI", fileUri);
             intent.putExtra("deleteImage", true);
         } else if (requestCode == ACTIVITY_CHOOSE_FILE) {

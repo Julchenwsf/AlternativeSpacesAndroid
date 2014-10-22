@@ -45,8 +45,6 @@ public class LoginActivity extends Activity implements Callback {
             public void onClick(View view) {
                 LoginTask loginTask = new LoginTask(username.getText().toString(), password.getText().toString(),activity);
                 loginTask.execute();
-                System.out.println(username.getText());
-                System.out.println(password.getText());
             }
         });
     }
