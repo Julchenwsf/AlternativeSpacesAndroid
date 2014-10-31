@@ -18,7 +18,7 @@ import groupaltspaces.alternativespacesandroid.util.MultipartUtility;
 
 
 public class UploadTask extends AsyncTask<Void, Void, List<String>> {
-    private static final String requestURL = "http://folk.ntnu.no/valerijf/div/AlternativeSpaces/source/backend/forms/uploadphoto.php";
+    private static final String requestURL = "http://mysplot.com/backend/forms/uploadphoto.php";
     private String title;
     private String interests;
     private String description;

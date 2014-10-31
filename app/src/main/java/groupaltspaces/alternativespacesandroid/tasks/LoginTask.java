@@ -15,7 +15,7 @@ import groupaltspaces.alternativespacesandroid.activity.LoginActivity;
 import groupaltspaces.alternativespacesandroid.util.MultipartUtility;
 
 public class LoginTask extends AsyncTask<Void, Void, List<String>> {
-    private static final String requestURL = "http://folk.ntnu.no/valerijf/div/AlternativeSpaces/source/backend/forms/logform.php";
+    private static final String requestURL = "http://mysplot.com/backend/forms/logform.php";
     private String username;
     private String password;
     private Callback callback;

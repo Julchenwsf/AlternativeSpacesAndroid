@@ -12,7 +12,7 @@ import java.util.Map;
 import groupaltspaces.alternativespacesandroid.util.MultipartUtility;
 
 public class InterestTask extends AsyncTask<String, Void, List<String>> {
-    private static final String requestURL = "http://folk.ntnu.no/valerijf/div/AlternativeSpaces/source/backend/db/DBInterests.php?q=";
+    private static final String requestURL = "http://mysplot.com/backend/db/DBInterests.php?q=";
     private InterestCallback callback;
 
     public InterestTask(InterestCallback callback){
