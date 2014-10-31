@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Spaces</string>
+    <string name="app_name">MySplot</string>
     <string name="take_photo">Take photo</string>
     <string name="upload_photo">Upload photo</string>
     <string name="logout">Logout</string>
