@@ -16,7 +16,8 @@
         <EditText
             style="@style/custom_EditTextStyle"
             android:id="@+id/title"
-            android:hint="@string/upload_photo_title" />
+            android:hint="@string/upload_photo_title"
+            android:inputType="textCapSentences" />
 
         <groupaltspaces.alternativespacesandroid.util.InterestCompleteTextView
             style="@style/custom_EditTextStyle"
@@ -29,7 +30,8 @@
             android:hint="@string/upload_photo_description"
             android:minLines="3"
             android:maxLines="6"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences" />
 
         <ImageView
             style="@style/custom_ImageViewStyle"
