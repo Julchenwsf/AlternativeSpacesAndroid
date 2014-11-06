@@ -4,9 +4,9 @@
     <string name="app_name">MySplot</string>
     <string name="take_photo">Take photo</string>
     <string name="upload_photo">Upload photo</string>
-    <string name="logout">Logout</string>
+    <string name="logout">Sign out</string>
 
-    <string name="login_login">Login</string>
+    <string name="login_login">Sign in</string>
     <string name="login_username">Username</string>
     <string name="login_password">Password</string>
 
