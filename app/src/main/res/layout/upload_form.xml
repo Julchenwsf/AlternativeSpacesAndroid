@@ -31,14 +31,15 @@
             android:minLines="3"
             android:maxLines="6"
             android:layout_height="wrap_content"
-            android:inputType="textCapSentences" />
+            android:inputType="textCapSentences|textMultiLine" />
 
         <ImageView
             style="@style/custom_ImageViewStyle"
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:contentDescription="Image to upload" />
 
         <Button
             style="@style/Button"

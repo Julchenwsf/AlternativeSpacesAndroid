@@ -16,7 +16,8 @@
         <EditText
             style="@style/custom_EditTextStyle"
             android:id="@+id/username"
-            android:hint="@string/login_username" />
+            android:hint="@string/login_username"
+            android:inputType="textVisiblePassword|textNoSuggestions" />
 
         <EditText
             style="@style/custom_EditTextStyle"
