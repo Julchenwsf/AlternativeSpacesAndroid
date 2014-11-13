@@ -77,12 +77,14 @@ public class UploadTask extends AsyncTask<Void, Void, List<String>> {
             JSONObject json = new JSONObject(response.get(0));
             boolean status = json.getBoolean("success");
 
-            JSONArray jsonArray = json.getJSONArray("response");
-            List<String> messages = new ArrayList<String>();
-            for (int i = 0;i<jsonArray.length();i++) messages.add(jsonArray.getString(i));
-
             if (status) callback.onSuccess();
-            else callback.onFail(messages);
+            else {
+                JSONArray jsonArray = json.getJSONArray("response");
+                List<String> messages = new ArrayList<String>();
+                for (int i = 0;i<jsonArray.length();i++) messages.add(jsonArray.getString(i));
+                callback.onFail(messages);
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

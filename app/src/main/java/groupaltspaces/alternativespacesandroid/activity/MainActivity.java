@@ -78,6 +78,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        System.out.println(requestCode + " " + resultCode + " " + data);
         if(resultCode != RESULT_OK) return;
 
         Intent intent = new Intent(context, UploadActivity.class);
@@ -179,6 +180,16 @@ public class MainActivity extends Activity {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator + "VID_" + System.currentTimeMillis() + ".mp4");
         } else {
             return null;
+        }
+
+        try {
+            if(!mediaFile.exists()) {
+                mediaFile.getParentFile().mkdirs();
+                mediaFile.createNewFile();
+            }
+
+        } catch (IOException e) {
+            System.err.println("Could not create file.");
         }
 
         return mediaFile;
